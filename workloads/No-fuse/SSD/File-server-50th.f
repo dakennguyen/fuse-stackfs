@@ -1,5 +1,5 @@
 set mode quit alldone
-set $dir=/home/bvangoor/EXT4_FS
+set $dir=/mnt/EXT4_FS
 set $nfiles=200000
 set $meandirwidth=20
 set $nthreads=50
@@ -23,7 +23,7 @@ define process name=fileserver,instances=1
                 flowop deletefile name=deletefile1,filesetname=bigfileset
                 flowop statfile name=statfile1,filesetname=bigfileset
                 flowop finishoncount name=finish, value=3000000
-                #So all the above operations will happen together for 3 M (SSD) times 
+                #So all the above operations will happen together for 3 M (SSD) times
         }
 }
 
@@ -31,9 +31,9 @@ create files
 #unmount and mount for better stability results
 system "sync"
 
-system "umount /home/bvangoor/EXT4_FS"
+system "umount /mnt/EXT4_FS"
 #change accordingly for HDD (sdb) and SSD(sdd)
-system "mount -t ext4 /dev/sdd /home/bvangoor/EXT4_FS"
+system "mount -t ext4 /dev/sdd /mnt/EXT4_FS"
 
 system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"

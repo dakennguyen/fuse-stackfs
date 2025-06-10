@@ -1,5 +1,5 @@
 set mode quit alldone
-set $dir=/home/bvangoor/COM_DIR/FUSE_EXT4_FS/
+set $dir=/mnt/COM_DIR/FUSE_EXT4_FS/
 set $nfiles=1
 set $meandirwidth=1
 set $nthreads=1
@@ -21,22 +21,22 @@ define process name=fileopen, instances=1
 }
 
 #prealloc the file on EXT4 F/S (save the time)
-system "mkdir -p /home/bvangoor/COM_DIR/FUSE_EXT4_FS"
-system "mkdir -p /home/bvangoor/COM_DIR/EXT4_FS"
+system "mkdir -p /mnt/COM_DIR/FUSE_EXT4_FS"
+system "mkdir -p /mnt/COM_DIR/EXT4_FS"
 
 create files
 
 #Move everything created under FUSE-EXT4 dir to EXT4
-system "mv /home/bvangoor/COM_DIR/FUSE_EXT4_FS/* /home/bvangoor/COM_DIR/EXT4_FS/"
+system "mv /mnt/COM_DIR/FUSE_EXT4_FS/* /mnt/COM_DIR/EXT4_FS/"
 
 #mounting and unmounting for better stable results
 system "sync"
-system "umount /home/bvangoor/COM_DIR/"
+system "umount /mnt/COM_DIR/"
 #Change accordingly for HDD(sdb) and SSD(sdd)
-system "mount -t ext4 /dev/sdb /home/bvangoor/COM_DIR/"
+system "mount -t ext4 /dev/sdb /mnt/COM_DIR/"
 
 #mount FUSE FS (default) on top of EXT4
-system "/home/bvangoor/fuse-playground/StackFS_LowLevel/StackFS_ll -s --statsdir=/tmp/ -r /home/bvangoor/COM_DIR/EXT4_FS/ /home/bvangoor/COM_DIR/FUSE_EXT4_FS/ > /dev/null &"
+system "/mnt/fuse-playground/StackFS_LowLevel/StackFS_ll -s --statsdir=/tmp/ -r /mnt/COM_DIR/EXT4_FS/ /mnt/COM_DIR/FUSE_EXT4_FS/ > /dev/null &"
 
 system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"

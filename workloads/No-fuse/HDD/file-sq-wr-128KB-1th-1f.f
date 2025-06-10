@@ -1,5 +1,5 @@
 set mode quit alldone
-set $dir=/home/bvangoor/EXT4_FS
+set $dir=/mnt/EXT4_FS
 set $nthreads=1
 #Fix I/O amount to 60 G
 define file name=bigfile, path=$dir, size=60g

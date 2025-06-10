@@ -1,5 +1,5 @@
 set mode quit alldone
-set $dir=/home/bvangoor/EXT4_FS/
+set $dir=/mnt/EXT4_FS/
 set $nfiles=1250000
 set $meandirwidth=20
 set $nthreads=100
@@ -44,15 +44,15 @@ define process name=webserver,instances=1
                 flowop closefile name=closefile10,fd=1
                 flowop appendfilerand name=appendlog,filesetname=logfiles,iosize=16k,fd=2
                 flowop finishoncount name=finish, value=8000000
-                #so that all the above operations will together complete 8 M(SSD) ops 
+                #so that all the above operations will together complete 8 M(SSD) ops
         }
 }
 create files
 
 system "sync"
-system "umount /home/bvangoor/EXT4_FS/"
+system "umount /mnt/EXT4_FS/"
 #change accordingly for HDD (sdb) and SSD (sdd)
-system "mount -t ext4 /dev/sdd /home/bvangoor/EXT4_FS"
+system "mount -t ext4 /dev/sdd /mnt/EXT4_FS"
 
 system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"

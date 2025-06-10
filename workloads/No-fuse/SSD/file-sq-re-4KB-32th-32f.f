@@ -1,5 +1,5 @@
 set mode quit alldone
-set $dir=/home/bvangoor/EXT4_FS
+set $dir=/mnt/EXT4_FS
 set $nfiles=32
 set $meandirwidth=32
 set $nthreads=1
@@ -106,7 +106,7 @@ define process name=filereader,instances=1
                 flowop closefile name=close12, fd=1, indexed=12
                 flowop finishoncount name=finish,value=1
         }
-        
+
         thread name=filereaderthread,memsize=$io_size, instances=$nthreads
         {
                 flowop openfile name=open13, indexed=13, filesetname=bigfileset, fd=1
@@ -270,9 +270,9 @@ define process name=filereader,instances=1
 create files
 #mount and unmount for better stability
 system "sync"
-system "umount /home/bvangoor/EXT4_FS"
+system "umount /mnt/EXT4_FS"
 #Change accordingly for HDD(sdb) and SSD(sdd)
-system "mount -t ext4 /dev/sdd /home/bvangoor/EXT4_FS"
+system "mount -t ext4 /dev/sdd /mnt/EXT4_FS"
 system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
 system "echo started >> cpustats.txt"

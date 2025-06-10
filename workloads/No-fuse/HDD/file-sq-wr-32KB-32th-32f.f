@@ -1,5 +1,5 @@
 set mode quit alldone
-set $dir=/home/bvangoor/EXT4_FS
+set $dir=/mnt/EXT4_FS
 set $nfiles=32
 set $meandirwidth=32
 set $nthreads=1
@@ -18,7 +18,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close1, fd=1, indexed=1
                 flowop finishoncount name=finish, value=1
         }
-        
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create2, filesetname=bigfileset, fd=1, indexed=2
@@ -26,7 +26,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close2, fd=1, indexed=2
                 flowop finishoncount name=finish, value=1
         }
-        
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create3, filesetname=bigfileset, fd=1, indexed=3
@@ -34,7 +34,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close3, fd=1, indexed=3
                 flowop finishoncount name=finish, value=1
         }
- 
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create4, filesetname=bigfileset, fd=1, indexed=4
@@ -42,7 +42,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close4, fd=1, indexed=4
                 flowop finishoncount name=finish, value=1
         }
- 
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create5, filesetname=bigfileset, fd=1, indexed=5
@@ -50,7 +50,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close5, fd=1, indexed=5
                 flowop finishoncount name=finish, value=1
         }
-        
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create6, filesetname=bigfileset, fd=1, indexed=6
@@ -58,7 +58,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close6, fd=1, indexed=6
                 flowop finishoncount name=finish, value=1
         }
-        
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create7, filesetname=bigfileset, fd=1, indexed=7
@@ -170,7 +170,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close20, fd=1, indexed=20
                 flowop finishoncount name=finish, value=1
         }
-        
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create21, filesetname=bigfileset, fd=1, indexed=21

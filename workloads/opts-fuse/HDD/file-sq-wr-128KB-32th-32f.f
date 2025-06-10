@@ -1,5 +1,5 @@
 set mode quit alldone
-set $dir=/home/bvangoor/COM_DIR/FUSE_EXT4_FS/
+set $dir=/mnt/COM_DIR/FUSE_EXT4_FS/
 set $nfiles=32
 set $meandirwidth=32
 set $nthreads=1
@@ -18,7 +18,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close1, fd=1, indexed=1
                 flowop finishoncount name=finish, value=1
         }
-        
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create2, filesetname=bigfileset, fd=1, indexed=2
@@ -26,7 +26,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close2, fd=1, indexed=2
                 flowop finishoncount name=finish, value=1
         }
-        
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create3, filesetname=bigfileset, fd=1, indexed=3
@@ -34,7 +34,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close3, fd=1, indexed=3
                 flowop finishoncount name=finish, value=1
         }
- 
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create4, filesetname=bigfileset, fd=1, indexed=4
@@ -42,7 +42,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close4, fd=1, indexed=4
                 flowop finishoncount name=finish, value=1
         }
- 
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create5, filesetname=bigfileset, fd=1, indexed=5
@@ -50,7 +50,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close5, fd=1, indexed=5
                 flowop finishoncount name=finish, value=1
         }
-        
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create6, filesetname=bigfileset, fd=1, indexed=6
@@ -58,7 +58,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close6, fd=1, indexed=6
                 flowop finishoncount name=finish, value=1
         }
-        
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create7, filesetname=bigfileset, fd=1, indexed=7
@@ -170,7 +170,7 @@ define process name=filesequentialwrite, instances=1
                 flowop closefile name=close20, fd=1, indexed=20
                 flowop finishoncount name=finish, value=1
         }
-        
+
         thread name=filewriter, memsize=$io_size, instances=$nthreads
         {
                 flowop createfile name=create21, filesetname=bigfileset, fd=1, indexed=21
@@ -268,19 +268,19 @@ define process name=filesequentialwrite, instances=1
         }
 }
 #prealloc the file on EXT4 F/S (save the time)
-system "mkdir -p /home/bvangoor/COM_DIR/FUSE_EXT4_FS"
-system "mkdir -p /home/bvangoor/COM_DIR/EXT4_FS"
+system "mkdir -p /mnt/COM_DIR/FUSE_EXT4_FS"
+system "mkdir -p /mnt/COM_DIR/EXT4_FS"
 
 create files
 
 #Move everything created under FUSE-EXT4 dir to EXT4 (Though nothing in this case)
-system "mv /home/bvangoor/COM_DIR/FUSE_EXT4_FS/* /home/bvangoor/COM_DIR/EXT4_FS/"
+system "mv /mnt/COM_DIR/FUSE_EXT4_FS/* /mnt/COM_DIR/EXT4_FS/"
 
 system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
 
 #mount max_write+wbc+splice FUSE FS (default) on top of EXT4
-system "/home/bvangoor/fuse-playground/StackFS_LowLevel/StackFS_ll --statsdir=/tmp/ -o max_write=131072 -o writeback_cache -o splice_read -o splice_write -o splice_move -r /home/bvangoor/COM_DIR/EXT4_FS/ /home/bvangoor/COM_DIR/FUSE_EXT4_FS/ > /dev/null &"
+system "/mnt/fuse-playground/StackFS_LowLevel/StackFS_ll --statsdir=/tmp/ -o max_write=131072 -o writeback_cache -o splice_read -o splice_write -o splice_move -r /mnt/COM_DIR/EXT4_FS/ /mnt/COM_DIR/FUSE_EXT4_FS/ > /dev/null &"
 
 system "echo started >> cpustats.txt"
 system "echo started >> diskstats.txt"
