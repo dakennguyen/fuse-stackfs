@@ -1,0 +1,48 @@
+set mode quit alldone
+set $dir=/tmp
+set $nfiles=3
+set $meandirwidth=3
+set $nthreads=1
+#Each thread reading 1.875 G
+set $io_size=4k
+set $iterations=15728640
+
+define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, dirgamma=0, size=2g, prealloc, reuse
+
+define process name=filereader,instances=1
+{
+        thread name=filereaderthread,memsize=$io_size, instances=$nthreads
+        {
+                flowop openfile name=open1, indexed=1, filesetname=bigfileset, fd=1
+                flowop read name=read-file-1, indexed=1, filesetname=bigfileset, iosize=$io_size, iters=$iterations, fd=1
+                flowop closefile name=close1, indexed=1, fd=1
+                flowop finishoncount name=finish, value=1
+        }
+
+        thread name=filereaderthread,memsize=$io_size, instances=$nthreads
+        {
+                flowop openfile name=open2, indexed=2, filesetname=bigfileset, fd=1
+                flowop read name=read-file-2, indexed=2, filesetname=bigfileset, iosize=$io_size, iters=$iterations, fd=1
+                flowop closefile name=close2, indexed=2, fd=1
+                flowop finishoncount name=finish, value=1
+        }
+
+        thread name=filereaderthread,memsize=$io_size, instances=$nthreads
+        {
+                flowop openfile name=open3, indexed=3, filesetname=bigfileset, fd=1
+                flowop read name=read-file-3, indexed=3, filesetname=bigfileset, iosize=$io_size, iters=$iterations, fd=1
+                flowop closefile name=close3, indexed=3, fd=1
+                flowop finishoncount name=finish,value=1
+        }
+}
+create files
+#mount and unmount for better stability
+#system "sync"
+#system "umount /mnt/EXT4_FS"
+#Change accordingly for HDD(sdb) and SSD(sdd)
+#system "mount -t ext4 /dev/sdd /mnt/EXT4_FS"
+system "sync"
+system "echo 3 > /proc/sys/vm/drop_caches"
+system "echo started >> cpustats.txt"
+system "echo started >> diskstats.txt"
+run
