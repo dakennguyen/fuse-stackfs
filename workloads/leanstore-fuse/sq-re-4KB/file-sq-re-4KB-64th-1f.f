@@ -2,7 +2,7 @@ set mode quit alldone
 set $dir=/mnt/test4
 set $nfiles=1
 set $meandirwidth=1
-set $nthreads=1
+set $nthreads=64
 
 define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, size=1g, prealloc, reuse
 
@@ -19,9 +19,9 @@ define process name=fileopen, instances=1
 create files
 #unmount and mount for better stability results
 #system "sync"
-#system "umount /tmp"
+#system "umount /mnt/EXT4_FS"
 #change accordingly for HDD(sdb) and SSD(sdd)
-#system "mount -t ext4 /dev/sdd /tmp"
+#system "mount -t ext4 /dev/sdd /mnt/EXT4_FS"
 system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
 system "echo started >> cpustats.txt"

@@ -5,9 +5,9 @@ set $meandirwidth=3
 set $nthreads=1
 #Each thread reading 1.875 G
 set $io_size=4k
-set $iterations=15728640
+set $iterations=262144
 
-define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, dirgamma=0, size=2g, prealloc, reuse
+define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, dirgamma=0, size=1g, prealloc, reuse
 
 define process name=filereader,instances=1
 {
