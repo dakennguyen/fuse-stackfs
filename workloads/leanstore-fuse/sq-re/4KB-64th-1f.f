@@ -1,8 +1,8 @@
 set mode quit alldone
-set $dir=/mnt/test4
+set $dir=/home/khoa/mnt/test4
 set $nfiles=1
 set $meandirwidth=1
-set $nthreads=3
+set $nthreads=64
 
 define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, size=1g, prealloc, reuse
 

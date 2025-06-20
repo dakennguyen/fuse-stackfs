@@ -1,10 +1,10 @@
 set mode quit alldone
-set $dir=/mnt/test4
+set $dir=/tmp
 set $nfiles=1
 set $meandirwidth=1
 set $nthreads=1
 
-define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, size=1g, prealloc, reuse
+define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, size=1g, prealloc
 
 define process name=fileopen, instances=1
 {
