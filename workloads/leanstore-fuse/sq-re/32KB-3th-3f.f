@@ -45,4 +45,4 @@ system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
 system "echo started >> cpustats.txt"
 system "echo started >> diskstats.txt"
-run
+run 60

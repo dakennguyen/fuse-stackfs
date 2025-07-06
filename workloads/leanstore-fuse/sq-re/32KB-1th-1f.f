@@ -26,7 +26,7 @@ system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
 system "echo started >> cpustats.txt"
 system "echo started >> diskstats.txt"
-run
+run 60
 
 #13.292: Run took 3 seconds...
 #13.292: Per-Operation Breakdown
