@@ -8,10 +8,10 @@ define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwid
 
 define process name=fileopen, instances=1
 {
-        thread name=fileopener, memsize=1m, instances=$nthreads
+        thread name=fileopener, memsize=128k, instances=$nthreads
         {
                 flowop openfile name=open1, filesetname=bigfileset, fd=1
-                flowop read name=read-file, filesetname=bigfileset, iosize=1m, iters=1024, fd=1
+                flowop read name=read-file, filesetname=bigfileset, iosize=128k, iters=8192, fd=1
                 flowop closefile name=close1, fd=1
                 flowop finishoncount name=finish, value=1
         }

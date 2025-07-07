@@ -4,8 +4,8 @@ set $nfiles=3
 set $meandirwidth=3
 set $nthreads=1
 #Each thread reading 1G
-set $io_size=1m
-set $iterations=1024
+set $io_size=128k
+set $iterations=8192
 
 define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, dirgamma=0, size=1g, prealloc
 
@@ -41,8 +41,8 @@ create files
 #system "umount /mnt/EXT4_FS"
 #Change accordingly for HDD(sdb) and SSD(sdd)
 #system "mount -t ext4 /dev/sdd /mnt/EXT4_FS"
-#system "sync"
-#system "echo 3 > /proc/sys/vm/drop_caches"
-#system "echo started >> cpustats.txt"
-#system "echo started >> diskstats.txt"
+system "sync"
+system "echo 3 > /proc/sys/vm/drop_caches"
+system "echo started >> cpustats.txt"
+system "echo started >> diskstats.txt"
 run 60
