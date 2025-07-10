@@ -37,12 +37,12 @@ system "sync"
 #system "mount -t ext4 /dev/sdd /mnt/EXT4_FS"
 
 #system "sync"
-#system "echo 3 > /proc/sys/vm/drop_caches"
+system "echo 3 > /proc/sys/vm/drop_caches"
 
 system "echo started >> cpustats.txt"
 system "echo started >> diskstats.txt"
 
-run
+run 60
 
 #0.000: Allocated 173MB of shared memory
 #rm: cannot remove '/tmp/bigfileset': No such file or directory
