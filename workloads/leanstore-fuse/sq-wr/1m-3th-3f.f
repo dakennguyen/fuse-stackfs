@@ -3,8 +3,8 @@ set $dir=/mnt/leanfs
 set $nfiles=3
 set $meandirwidth=3
 set $nthreads=1
-set $io_size=4k
-set $iterations=262144
+set $io_size=1m
+set $iterations=1024
 
 define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth,dirgamma=0,size=2g
 

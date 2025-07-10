@@ -6,10 +6,10 @@ define file name=bigfile, path=$dir
 
 define process name=fileopen, instances=1
 {
-        thread name=fileopener, memsize=4k, instances=$nthreads
+        thread name=fileopener, memsize=1m, instances=$nthreads
         {
                 flowop createfile name=create1, filesetname=bigfile
-                flowop write name=write-file, filesetname=bigfile, iosize=4k, iters=262144
+                flowop write name=write-file, filesetname=bigfile, iosize=1m, iters=1024
                 flowop closefile name=close1
                 flowop finishoncount name=finish, value=1
         }
