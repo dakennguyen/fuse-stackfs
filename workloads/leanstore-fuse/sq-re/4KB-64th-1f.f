@@ -1,5 +1,5 @@
 set mode quit alldone
-set $dir=/home/khoa/mnt/test4
+set $dir=/mnt/leanfs
 set $nfiles=1
 set $meandirwidth=1
 set $nthreads=64

@@ -1,5 +1,5 @@
 set mode quit alldone
-set $dir=/home/khoa/mnt/test4
+set $dir=/mnt/leanfs
 set $nthreads=1
 
 define file name=bigfile, path=$dir

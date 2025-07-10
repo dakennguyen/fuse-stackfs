@@ -1,4 +1,4 @@
-set $dir=/home/khoa/mnt/test4
+set $dir=/mnt/leanfs
 set $meandirwidth=1000
 set $nfiles=10000
 set $filesize=128k
