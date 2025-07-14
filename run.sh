@@ -17,12 +17,19 @@ fi
 dirs=(/mnt/leanfs /mnt/ext4 /mnt/xfs /mnt/btrfs)
 iosizes=(4k 32k 128k 1m)
 
+# Map filesystems to devices
+declare -A fs_map
+fs_map[/mnt/leanfs]=sdb
+fs_map[/mnt/ext4]=sdc
+fs_map[/mnt/xfs]=sdd
+fs_map[/mnt/btrfs]=sde
+
 template_dir=$(dirname "$template_file")
 template_name="${template_file%.*}"
 
 # Output CSV
 csv_file="${template_name}.csv"
-echo "filesystem,iosize,ops,total_ops_per_sec,read_ops,write_ops,throughput,latency" > "$csv_file"
+echo "filesystem,iosize,ops,total_ops_per_sec,read_ops,write_ops,throughput,latency,avg_usr,avg_sys,avg_util" > "$csv_file"
 
 # Loop over all combinations
 for dir in "${dirs[@]}"; do
@@ -46,14 +53,20 @@ for dir in "${dirs[@]}"; do
 
     # Run and capture output
     filebench -f "$workload_file" | tee "$output_file" | grep "IO Summary:" > tmp_summary.txt
+    pkill iostat
     rm "$workload_file"
+
+    # Compute avg usr/sys, avg disk util from stat.log
+    if [[ -f stat.log ]]; then
+      stats=$(grep -v 'Average' stat.log | awk -v dev="${fs_map[$dir]}" ' /^avg-cpu:/ { getline; usr  += $1; sys  += $3; ncpu++ ; next } $1 == dev { util += $(NF); ndev++ } END { if (ncpu && ndev) printf "%.2f,%.2f,%.2f", usr/ncpu, sys/ncpu, util/ndev; else print ",,"; }')
+    else
+      stats=",,"
+    fi
 
     # Parse IO Summary
     if [[ -s tmp_summary.txt ]]; then
       summary_line=$(cat tmp_summary.txt)
 
-      # Example:
-      # 15.852: IO Summary: 584962 ops 58486.187 ops/s 58486/0 rd/wr 7309.9mb/s   0.0ms/op
       if [[ $summary_line =~ ([0-9\.]+):\ IO\ Summary:\ *([0-9]+)\ ops\ ([0-9\.]+)\ ops/s\ ([0-9]+)/([0-9]+)\ rd/wr\ *([0-9\.a-zA-Z/]+)\ +([0-9\.]+)ms/op ]]; then
         ops="${BASH_REMATCH[2]}"
         ops_per_sec="${BASH_REMATCH[3]}"
@@ -61,12 +74,12 @@ for dir in "${dirs[@]}"; do
         wr_ops="${BASH_REMATCH[5]}"
         throughput="${BASH_REMATCH[6]}"
         latency="${BASH_REMATCH[7]}"
-        echo "${dir##*/},$iosize,$ops,$ops_per_sec,$rd_ops,$wr_ops,$throughput,$latency" >> "$csv_file"
+        echo "${dir##*/},$iosize,$ops,$ops_per_sec,$rd_ops,$wr_ops,$throughput,$latency,$stats" >> "$csv_file"
       else
-        echo "${dir##*/},$iosize,PARSE_ERROR,,,,," >> "$csv_file"
+        echo "${dir##*/},$iosize,PARSE_ERROR,,,,,,$stats" >> "$csv_file"
       fi
     else
-      echo "${dir##*/},$iosize,NO_SUMMARY,,,,," >> "$csv_file"
+      echo "${dir##*/},$iosize,NO_SUMMARY,,,,,,$stats" >> "$csv_file"
     fi
 
     echo

@@ -27,4 +27,5 @@ system "mount /dev/sde /mnt/btrfs"
 system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
 
+system "iostat -xy 1 > stat.log &"
 run 10
