@@ -84,6 +84,12 @@ for dir in "${dirs[@]}"; do
 
     echo
   done
+
+  if [[ "$dir" == "/mnt/leanfs" ]]; then
+    sleep 1
+    pm2 stop leanfs > /dev/null 2>&1
+    sleep 1
+  fi
 done
 
 # Clean up temp
