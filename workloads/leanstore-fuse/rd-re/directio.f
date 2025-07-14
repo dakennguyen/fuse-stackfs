@@ -9,10 +9,10 @@ define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwid
 
 define process name=fileopen, instances=1
 {
-        thread name=fileopener, memsize=$iosize, instances=$nthreads
+        thread name=fileopener, memsize=2m, instances=$nthreads
         {
-                flowop openfile name=open1, filesetname=bigfileset, fd=1
-                flowop read name=read-file, filesetname=bigfileset, random, iosize=$iosize, iters=26214400, fd=1
+                flowop openfile name=open1, directio, filesetname=bigfileset, fd=1
+                flowop read name=read-file, directio, filesetname=bigfileset, random, iosize=$iosize, iters=26214400, fd=1
                 flowop closefile name=close1, fd=1
                 flowop finishoncount name=finish, value=1
         }
@@ -20,14 +20,7 @@ define process name=fileopen, instances=1
 create files
 
 system "sync"
-system "umount /mnt/ext4"
-system "umount /mnt/xfs"
-system "umount /mnt/btrfs"
-system "mount /dev/sdc /mnt/ext4"
-system "mount /dev/sdd /mnt/xfs"
-system "mount /dev/sde /mnt/btrfs"
-
-system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
 
+system "iostat -xy 1 > stat.log &"
 run 10
