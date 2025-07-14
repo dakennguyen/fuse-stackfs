@@ -38,6 +38,9 @@ for dir in "${dirs[@]}"; do
     if [[ "$dir" == "/mnt/leanfs" ]]; then
       pm2 restart leanfs > /dev/null 2>&1
       sleep 2
+    else
+      sync
+      mount "/dev/${fs_map[$dir]}" "$dir"
     fi
 
     # Create output and workload file names
@@ -83,6 +86,11 @@ for dir in "${dirs[@]}"; do
     fi
 
     echo
+
+    # Unmount
+    if [[ "$dir" != "/mnt/leanfs" ]]; then
+      umount "$dir"
+    fi
   done
 
   if [[ "$dir" == "/mnt/leanfs" ]]; then
