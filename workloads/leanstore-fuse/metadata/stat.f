@@ -14,4 +14,12 @@ define process name=examinefiles,instances=1
   }
 }
 
+system "sync"
+system "umount /mnt/ext4"
+system "umount /mnt/xfs"
+system "umount /mnt/btrfs"
+system "mount /dev/sdc /mnt/ext4"
+system "mount /dev/sdd /mnt/xfs"
+system "mount /dev/sde /mnt/btrfs"
+
 run 10

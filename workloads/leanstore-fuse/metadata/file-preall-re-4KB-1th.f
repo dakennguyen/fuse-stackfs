@@ -18,14 +18,18 @@ define process name=fileopen, instances=1
                 #so that open, read and close happen 1 M times
         }
 }
+
 create files
-#mounting and unmounting for better stable results
-#system "sync"
-#system "umount /mnt/EXT4_FS/"
-#change accordingly for HDD (sdb) and SSD (sdd)
-#system "mount -t ext4 /dev/sdd /mnt/EXT4_FS"
+
+system "sync"
+system "umount /mnt/ext4"
+system "umount /mnt/xfs"
+system "umount /mnt/btrfs"
+system "mount /dev/sdc /mnt/ext4"
+system "mount /dev/sdd /mnt/xfs"
+system "mount /dev/sde /mnt/btrfs"
+
 system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
-system "echo started >> cpustats.txt"
-system "echo started >> diskstats.txt"
-run 60
+
+run 10

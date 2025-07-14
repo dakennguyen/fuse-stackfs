@@ -43,23 +43,22 @@ define process name=webserver,instances=1
                 flowop readwholefile name=readfile10,fd=1,iosize=1m
                 flowop closefile name=closefile10,fd=1
                 flowop appendfilerand name=appendlog,filesetname=logfiles,iosize=16k,fd=2
-                flowop finishoncount name=finish, value=3000000
+                flowop finishoncount name=finish, value=30000000
                 #so that all the above operations will together complete 3 M(SSD) ops
         }
 }
 
-system "rm -r /tmp/bigfileset"
 create files
 
 system "sync"
-#system "umount /mnt/EXT4_FS/"
-#change accordingly for HDD (sdb) and SSD (sdd)
-#system "mount -t ext4 /dev/sdd /mnt/EXT4_FS"
+system "umount /mnt/ext4"
+system "umount /mnt/xfs"
+system "umount /mnt/btrfs"
+system "mount /dev/sdc /mnt/ext4"
+system "mount /dev/sdd /mnt/xfs"
+system "mount /dev/sde /mnt/btrfs"
 
-#system "sync"
+system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
 
-system "echo started >> cpustats.txt"
-system "echo started >> diskstats.txt"
-
-run 60
+run 10
