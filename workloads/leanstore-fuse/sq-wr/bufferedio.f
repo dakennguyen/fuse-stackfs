@@ -17,14 +17,6 @@ define process name=fileopen, instances=1
 }
 
 system "sync"
-system "umount /mnt/ext4"
-system "umount /mnt/xfs"
-system "umount /mnt/btrfs"
-system "mount /dev/sdc /mnt/ext4"
-system "mount /dev/sdd /mnt/xfs"
-system "mount /dev/sde /mnt/btrfs"
-
-system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
 
 system "iostat -xy 1 > stat.log &"
