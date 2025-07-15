@@ -1,6 +1,6 @@
 set mode quit alldone
 set $dir=/mnt/leanfs
-set $nfiles=12500
+set $nfiles=125000
 set $meandirwidth=20
 set $nthreads=100
 set $size1=16k
@@ -51,14 +51,7 @@ define process name=webserver,instances=1
 create files
 
 system "sync"
-system "umount /mnt/ext4"
-system "umount /mnt/xfs"
-system "umount /mnt/btrfs"
-system "mount /dev/sdc /mnt/ext4"
-system "mount /dev/sdd /mnt/xfs"
-system "mount /dev/sde /mnt/btrfs"
-
-system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
 
+system "iostat -xy 1 > stat.log &"
 run 10

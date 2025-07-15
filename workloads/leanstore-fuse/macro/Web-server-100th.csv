@@ -1,0 +1,5 @@
+filesystem,iosize,ops,total_ops_per_sec,read_ops,write_ops,throughput,latency,avg_usr,avg_sys,avg_util
+leanfs,4k,59304,5929.853,1911,194,31.3mb/s,46.64,27.95,20.53,93.80
+ext4,4k,102842,10282.797,3318,336,54.4mb/s,27.20,1.14,4.36,82.90
+xfs,4k,217179,21715.533,7002,706,114.9mb/s,12.91,1.97,8.58,83.10
+btrfs,4k,232471,23244.478,7500,754,123.0mb/s,12.04,3.72,13.01,84.70

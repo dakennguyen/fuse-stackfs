@@ -1,7 +1,7 @@
 set mode quit alldone
 set $dir=/mnt/leanfs
-set $nfiles=15000
-set $meandirwidth=15000
+set $nfiles=150000
+set $meandirwidth=150000
 set $nthreads=16
 set $size1=16k
 
@@ -32,14 +32,7 @@ define process name=mailserver,instances=1
 create files
 
 system "sync"
-system "umount /mnt/ext4"
-system "umount /mnt/xfs"
-system "umount /mnt/btrfs"
-system "mount /dev/sdc /mnt/ext4"
-system "mount /dev/sdd /mnt/xfs"
-system "mount /dev/sde /mnt/btrfs"
-
-system "sync"
 system "echo 3 > /proc/sys/vm/drop_caches"
 
+system "iostat -xy 1 > stat.log &"
 run 10
