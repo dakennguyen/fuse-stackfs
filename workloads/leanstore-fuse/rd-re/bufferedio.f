@@ -1,11 +1,12 @@
 set mode quit alldone
 set $dir=/mnt/leanfs
 set $iosize=4k
+set $size=1g
 set $nfiles=1
 set $meandirwidth=1
 set $nthreads=1
 
-define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, size=1g, prealloc
+define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, size=$size, prealloc
 
 define process name=fileopen, instances=1
 {

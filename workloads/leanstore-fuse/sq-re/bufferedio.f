@@ -4,8 +4,9 @@ set $iosize=4k
 set $nfiles=1
 set $meandirwidth=1
 set $nthreads=1
+set $size=14m
 
-define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, size=1g, prealloc
+define fileset name=bigfileset, path=$dir, entries=$nfiles, dirwidth=$meandirwidth, size=$size, prealloc
 
 define process name=fileopen, instances=1
 {
