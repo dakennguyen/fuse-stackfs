@@ -1,6 +1,6 @@
 set mode quit alldone
 set $dir=/mnt/leanfs
-set $nfiles=125000
+set $nfiles=250000
 set $meandirwidth=20
 set $nthreads=100
 set $size1=16k

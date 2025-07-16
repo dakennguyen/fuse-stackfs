@@ -14,8 +14,8 @@ if [[ ! -f "$template_file" ]]; then
 fi
 
 # Define test parameters
-dirs=(/mnt/leanfs /mnt/ext4 /mnt/xfs /mnt/btrfs)
-iosizes=(4k 32k 128k 1m)
+dirs=(/mnt/leanfs /mnt/ext4)
+nthreadss=(1 2 4 8 16 32 64)
 
 # Map filesystems to devices
 declare -A fs_map
@@ -29,12 +29,12 @@ template_name="${template_file%.*}"
 
 # Output CSV
 csv_file="${template_name}.csv"
-echo "filesystem,iosize,ops,total_ops_per_sec,read_ops,write_ops,throughput,latency,avg_usr,avg_sys,avg_util" > "$csv_file"
+echo "filesystem,nthreads,ops,total_ops_per_sec,read_ops,write_ops,throughput,latency,avg_usr,avg_sys,avg_util" > "$csv_file"
 
 # Loop over all combinations
 for dir in "${dirs[@]}"; do
-  for iosize in "${iosizes[@]}"; do
-    echo "=== Running workload: dir=$dir, iosize=$iosize ==="
+  for nthreads in "${nthreadss[@]}"; do
+    echo "=== Running workload: dir=$dir, nthreads=$nthreads ==="
     if [[ "$dir" == "/mnt/leanfs" ]]; then
       pm2 restart leanfs > /dev/null 2>&1
       sleep 2
@@ -44,14 +44,14 @@ for dir in "${dirs[@]}"; do
     fi
 
     # Create output and workload file names
-    tag="${dir##*/}_${iosize}"
+    tag="${dir##*/}_${nthreads}"
     workload_file="generated_${tag}.f"
     output_file="${template_name}-${tag}.out"
 
     # Generate workload file with substituted variables
     sed \
       -e "s|set \$dir=.*|set \$dir=$dir|" \
-      -e "s|set \$iosize=.*|set \$iosize=$iosize|" \
+      -e "s|set \$nthreads=.*|set \$nthreads=$nthreads|" \
       "$template_file" > "$workload_file"
 
     # Run and capture output
@@ -77,12 +77,12 @@ for dir in "${dirs[@]}"; do
         wr_ops="${BASH_REMATCH[5]}"
         throughput="${BASH_REMATCH[6]}"
         latency="${BASH_REMATCH[7]}"
-        echo "${dir##*/},$iosize,$ops,$ops_per_sec,$rd_ops,$wr_ops,$throughput,$latency,$stats" >> "$csv_file"
+        echo "${dir##*/},$nthreads,$ops,$ops_per_sec,$rd_ops,$wr_ops,$throughput,$latency,$stats" >> "$csv_file"
       else
-        echo "${dir##*/},$iosize,PARSE_ERROR,,,,,,$stats" >> "$csv_file"
+        echo "${dir##*/},$nthreads,PARSE_ERROR,,,,,,$stats" >> "$csv_file"
       fi
     else
-      echo "${dir##*/},$iosize,NO_SUMMARY,,,,,,$stats" >> "$csv_file"
+      echo "${dir##*/},$nthreads,NO_SUMMARY,,,,,,$stats" >> "$csv_file"
     fi
 
     echo
